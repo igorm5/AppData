@@ -1,4 +1,4 @@
-package org.org.Database;
+package org.org.database;
 
 import java.sql.*;
 import javax.swing.JOptionPane;
