@@ -1,3 +1,4 @@
+package org.main;
 import javax.swing.*;
 import java.awt.*;
 
