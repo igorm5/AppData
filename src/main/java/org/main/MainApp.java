@@ -1,4 +1,5 @@
 package org.main;
+import org.gui.MainFrame;
 import javax.swing.*;
 import java.awt.*;
 

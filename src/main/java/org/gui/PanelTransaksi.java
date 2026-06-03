@@ -1,4 +1,5 @@
 package org.gui;
+import org.database.DBConnection;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;

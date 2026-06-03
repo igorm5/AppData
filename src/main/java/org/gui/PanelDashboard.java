@@ -1,3 +1,5 @@
+package org.gui;
+import org.database.DBConnection;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
