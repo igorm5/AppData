@@ -19,14 +19,9 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * KasirFrame
- * Halaman Point of Sale (POS) untuk role Kasir.
- * Kasir memilih barang, input qty, melihat total, lalu memproses pembayaran.
- */
+
 public class KasirFrame extends JFrame {
 
-    // ── Komponen UI ───────────────────────────────────────────────────────────
     private JComboBox<Barang> cmbBarang;
     private JSpinner          spnQty;
     private JButton           btnTambahItem, btnHapusItem, btnBayar, btnBersihkan, btnLogout;
@@ -38,21 +33,17 @@ public class KasirFrame extends JFrame {
     private JLabel            lblTotal, lblStokInfo, lblStatus;
     private JTextField        txtCustomer;
 
-    // ── Data & DAO ─────────────────────────────────────────────────────────────
     private final Admin          adminLogin;
     private final BarangDAO      barangDAO    = new BarangDAO();
     private final TransaksiDAO   transaksiDAO = new TransaksiDAO();
     private final List<ItemNota> keranjang    = new ArrayList<>();
 
-    // ── Warna tema ─────────────────────────────────────────────────────────────
     private static final Color CLR_DARK     = new Color(27,  44,  56);
     private static final Color CLR_GREEN    = new Color(52, 120,  77);
     private static final Color CLR_RED      = new Color(190,  50,  50);
     private static final Color CLR_ORANGE   = new Color(200, 100,  30);
     private static final Color CLR_BG       = new Color(245, 247, 250);
     private static final Color CLR_WHITE    = Color.WHITE;
-
-    // ── Konstruktor ───────────────────────────────────────────────────────────
 
     public KasirFrame(Admin admin) {
         this.adminLogin = admin;
@@ -61,20 +52,17 @@ public class KasirFrame extends JFrame {
         muatRiwayatTransaksi();
     }
 
-    // ── Inisialisasi UI ───────────────────────────────────────────────────────
-
     private void initUI() {
         setTitle("Kasir POS — " + adminLogin.getUsername());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(1000, 680);
         setLocationRelativeTo(null);
 
-        // ── Header ────────────────────────────────────────────────────────────
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(CLR_DARK);
         header.setBorder(new EmptyBorder(12, 20, 12, 20));
 
-        JLabel lblJudul = new JLabel("🛒  Kasir — Point of Sale");
+        JLabel lblJudul = new JLabel("Kasir — Point of Sale");
         lblJudul.setForeground(CLR_WHITE);
         lblJudul.setFont(new Font("Segoe UI", Font.BOLD, 18));
         header.add(lblJudul, BorderLayout.WEST);
@@ -85,7 +73,6 @@ public class KasirFrame extends JFrame {
         lblUser.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         header.add(lblUser, BorderLayout.EAST);
 
-        // ── Panel kiri: pilih barang ───────────────────────────────────────────
         JPanel pilihPanel = new JPanel();
         pilihPanel.setLayout(new BoxLayout(pilihPanel, BoxLayout.Y_AXIS));
         pilihPanel.setBackground(CLR_WHITE);
@@ -141,7 +128,6 @@ public class KasirFrame extends JFrame {
         pilihPanel.add(cmbBarang);
         pilihPanel.add(Box.createVerticalStrut(6));
 
-        // Info stok barang terpilih
         lblStokInfo = new JLabel(" ");
         lblStokInfo.setFont(new Font("Segoe UI", Font.ITALIC, 11));
         lblStokInfo.setForeground(new Color(100, 120, 130));
@@ -158,22 +144,21 @@ public class KasirFrame extends JFrame {
         pilihPanel.add(spnQty);
         pilihPanel.add(Box.createVerticalStrut(20));
 
-        // Tombol tambah ke keranjang
         btnTambahItem = buatTombol("+ Tambah ke Keranjang", CLR_GREEN);
         pilihPanel.add(btnTambahItem);
         pilihPanel.add(Box.createVerticalStrut(8));
 
-        btnHapusItem = buatTombol("✕ Hapus Item Terpilih", CLR_RED);
+        btnHapusItem = buatTombol("x Hapus Item Terpilih", CLR_RED);
         btnHapusItem.setEnabled(false);
         pilihPanel.add(btnHapusItem);
         pilihPanel.add(Box.createVerticalStrut(8));
 
-        btnBersihkan = buatTombol("↺ Kosongkan Keranjang", new Color(90, 100, 115));
+        btnBersihkan = buatTombol("Kosongkan Keranjang", new Color(90, 100, 115));
         pilihPanel.add(btnBersihkan);
         pilihPanel.add(Box.createVerticalStrut(12));
         pilihPanel.add(Box.createVerticalGlue());
 
-        btnLogout = buatTombol("⏻ Logout", new Color(90, 100, 115));
+        btnLogout = buatTombol("Logout", new Color(90, 100, 115));
         btnLogout.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnLogout.setPreferredSize(new Dimension(140, 44));
         btnLogout.setMaximumSize(new Dimension(140, 44));
@@ -184,7 +169,6 @@ public class KasirFrame extends JFrame {
         lblStatus.setFont(new Font("Segoe UI", Font.ITALIC, 11));
         pilihPanel.add(lblStatus);
 
-        // ── Panel kanan: konten tab keranjang & riwayat ─────────────────────────
         String[] kolom = {"Nama Barang", "Harga Satuan", "Qty", "Subtotal"};
         keranjangModel = new DefaultTableModel(kolom, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
@@ -208,7 +192,7 @@ public class KasirFrame extends JFrame {
 
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
         btnPanel.setBackground(CLR_WHITE);
-        btnBayar  = buatTombolKecil("💳  BAYAR", CLR_GREEN);
+        btnBayar  = buatTombolKecil("BAYAR", CLR_GREEN);
         btnBayar.setFont(new Font("Segoe UI", Font.BOLD, 16));
         btnBayar.setPreferredSize(new Dimension(140, 44));
         btnPanel.add(btnBayar);
@@ -262,7 +246,6 @@ public class KasirFrame extends JFrame {
         add(header, BorderLayout.NORTH);
         add(body, BorderLayout.CENTER);
 
-        // ── Event listener ────────────────────────────────────────────────────
         btnTambahItem.addActionListener(e -> {
             cmbBarang.setPopupVisible(false);
             tambahKeKeranjang();
@@ -294,8 +277,6 @@ public class KasirFrame extends JFrame {
         });
     }
 
-    // ── Muat data barang ke ComboBox ──────────────────────────────────────────
-
     private void muatDaftarBarang() {
         cmbBarang.removeAllItems();
         List<Barang> list = barangDAO.getAll();
@@ -317,26 +298,18 @@ public class KasirFrame extends JFrame {
             : new Color(80, 120, 90));
     }
 
-    // ── Aksi keranjang belanja ─────────────────────────────────────────────────
-
-    /**
-     * Menambahkan barang terpilih ke keranjang.
-     * Validasi: stok cukup, item belum ada di keranjang (merge qty jika sudah ada).
-     */
     private void tambahKeKeranjang() {
         Barang barang = (Barang) cmbBarang.getSelectedItem();
         if (barang == null) return;
 
         int qty = (int) spnQty.getValue();
 
-        // Cek stok awal
         if (barang.getStok() < qty) {
             tampilStatus("Stok " + barang.getNamaBarang() + " tidak mencukupi! "
                          + "(Stok: " + barang.getStok() + ")", true);
             return;
         }
 
-        // Cek apakah barang sudah ada di keranjang → merge qty
         for (int i = 0; i < keranjang.size(); i++) {
             if (keranjang.get(i).getNamaBarang().equals(barang.getNamaBarang())) {
                 int qtyBaru = keranjang.get(i).getQty() + qty;
@@ -352,7 +325,6 @@ public class KasirFrame extends JFrame {
             }
         }
 
-        // Tambah item baru
         keranjang.add(new ItemNota(barang.getNamaBarang(), barang.getHargaSatuan(), qty));
         refreshKeranjang();
         cmbBarang.setSelectedItem(barang);
@@ -380,7 +352,6 @@ public class KasirFrame extends JFrame {
         }
     }
 
-    /** Menyegarkan tabel keranjang dan menghitung ulang total */
     private void refreshKeranjang() {
         keranjangModel.setRowCount(0);
         double total = 0;
@@ -411,14 +382,6 @@ public class KasirFrame extends JFrame {
         btnRefreshRiwayat.setEnabled(true);
     }
 
-    // ── Proses pembayaran ─────────────────────────────────────────────────────
-
-    /**
-     * Memproses pembayaran:
-     * 1. Validasi keranjang tidak kosong
-     * 2. Kirim ke TransaksiDAO untuk disimpan secara atomik
-     * 3. Tampilkan struk jika berhasil
-     */
     private void prosesBayar() {
         if (keranjang.isEmpty()) {
             JOptionPane.showMessageDialog(this,
@@ -432,7 +395,6 @@ public class KasirFrame extends JFrame {
 
         double total = keranjang.stream().mapToDouble(ItemNota::getSubtotal).sum();
 
-        // Konfirmasi bayar
         int konfirmasi = JOptionPane.showConfirmDialog(this,
             "Proses pembayaran sebesar " + FormatUtil.rupiah(total) + "?",
             "Konfirmasi Bayar", JOptionPane.YES_NO_OPTION);
@@ -441,7 +403,6 @@ public class KasirFrame extends JFrame {
         btnBayar.setEnabled(false);
         btnBayar.setText("Memproses...");
 
-        // Salin data keranjang untuk worker thread
         final List<ItemNota> itemsCopy = new ArrayList<>(keranjang);
         final String customerFinal     = namaCustomer;
         final double totalFinal        = total;
@@ -459,16 +420,13 @@ public class KasirFrame extends JFrame {
                     String hasil = get();
 
                     if (hasil != null && !hasil.startsWith("STOK_KURANG")) {
-                        // Berhasil — tampilkan struk
                         String noNota = hasil;
                         tampilStatus("Transaksi berhasil: " + noNota, false);
 
-                        // Tampilkan dialog struk
                         new StrukDialog(KasirFrame.this, noNota, customerFinal,
                                         adminLogin.getUsername(), itemsCopy, totalFinal)
                                 .setVisible(true);
 
-                        // Reset keranjang
                         keranjang.clear();
                         refreshKeranjang();
                         txtCustomer.setText("");
@@ -489,7 +447,7 @@ public class KasirFrame extends JFrame {
                     tampilStatus("Error: " + ex.getMessage(), true);
                 } finally {
                     btnBayar.setEnabled(true);
-                    btnBayar.setText("💳  BAYAR");
+                    btnBayar.setText("BAYAR");
                 }
             }
         };
@@ -505,8 +463,6 @@ public class KasirFrame extends JFrame {
         lblStatus.setText(pesan);
         lblStatus.setForeground(error ? CLR_RED : CLR_GREEN);
     }
-
-    // ── Helper UI ─────────────────────────────────────────────────────────────
 
     private void styleTable(JTable table) {
         table.setFont(new Font("Segoe UI", Font.PLAIN, 13));
