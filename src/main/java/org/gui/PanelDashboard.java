@@ -15,7 +15,7 @@ public class PanelDashboard extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(24, 24, 24, 24));
 
         // Header
-        JLabel judul = new JLabel("🏠  Dashboard");
+        JLabel judul = new JLabel("Dashboard");
         judul.setFont(new Font("Segoe UI", Font.BOLD, 22));
         judul.setForeground(new Color(0x1A, 0x1A, 0x2E));
         judul.setBorder(BorderFactory.createEmptyBorder(0, 0, 8, 0));
@@ -39,10 +39,10 @@ public class PanelDashboard extends JPanel {
         lblTotalTransaksi = new JLabel("–");
         lblTotalOmzet = new JLabel("–");
 
-        statsPanel.add(makeStatCard("👤 Total Customer", lblTotalCustomer, new Color(0x17, 0x76, 0xD2)));
-        statsPanel.add(makeStatCard("📦 Total Barang", lblTotalBarang, new Color(0x2E, 0x7D, 0x32)));
-        statsPanel.add(makeStatCard("🧾 Total Transaksi", lblTotalTransaksi, new Color(0xF5, 0x7C, 0x00)));
-        statsPanel.add(makeStatCard("💰 Total Omzet (Rp)", lblTotalOmzet, new Color(0x6A, 0x1B, 0x9A)));
+        statsPanel.add(makeStatCard("Total Customer", lblTotalCustomer, new Color(0x17, 0x76, 0xD2)));
+        statsPanel.add(makeStatCard("Total Barang", lblTotalBarang, new Color(0x2E, 0x7D, 0x32)));
+        statsPanel.add(makeStatCard("Total Transaksi", lblTotalTransaksi, new Color(0xF5, 0x7C, 0x00)));
+        statsPanel.add(makeStatCard("Total Omzet (Rp)", lblTotalOmzet, new Color(0x6A, 0x1B, 0x9A)));
 
         JPanel statsWrapper = new JPanel(new BorderLayout());
         statsWrapper.setBackground(MainFrame.C_BG);
@@ -52,7 +52,7 @@ public class PanelDashboard extends JPanel {
         // Info singkat tentang normalisasi
         JPanel infoBox = MainFrame.makeWhiteBox();
         infoBox.setLayout(new BorderLayout());
-        JLabel infoTitle = new JLabel("  📖  Struktur Database – Hasil Normalisasi 3NF");
+        JLabel infoTitle = new JLabel("Struktur Database – Hasil Normalisasi 3NF");
         infoTitle.setFont(new Font("Segoe UI", Font.BOLD, 13));
         infoTitle.setForeground(new Color(0x1A, 0x73, 0xE8));
         infoTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));

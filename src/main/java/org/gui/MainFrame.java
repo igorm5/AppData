@@ -78,11 +78,11 @@ public class MainFrame extends JFrame {
 
         // Nav buttons
         JButton[] navBtns = {
-            makeNavBtn("🏠  Dashboard",    "DASHBOARD"),
-            makeNavBtn("👤  Customer",     "CUSTOMER"),
-            makeNavBtn("📦  Barang",       "BARANG"),
-            makeNavBtn("🧾  Transaksi",    "TRANSAKSI"),
-            makeNavBtn("📋  Detail Nota",  "NOTA"),
+            makeNavBtn("Dashboard",    "DASHBOARD"),
+            makeNavBtn("Customer",     "CUSTOMER"),
+            makeNavBtn("Barang",       "BARANG"),
+            makeNavBtn("Transaksi",    "TRANSAKSI"),
+            makeNavBtn("Detail Nota",  "NOTA"),
         };
 
         for (JButton b : navBtns) sidebar.add(b);
@@ -94,7 +94,7 @@ public class MainFrame extends JFrame {
         sep1.setMaximumSize(new Dimension(210, 1));
         sidebar.add(sep1);
 
-        JButton btnKoneksi = makeSideBtn("🔌  Koneksi Database", C_PRIMARY);
+        JButton btnKoneksi = makeSideBtn("Koneksi Database", C_PRIMARY);
         btnKoneksi.addActionListener(e -> doConnect());
         btnKoneksi.setMaximumSize(new Dimension(210, 42));
         sidebar.add(btnKoneksi);

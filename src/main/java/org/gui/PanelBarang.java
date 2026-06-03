@@ -12,49 +12,87 @@ public class PanelBarang extends JPanel {
     private DefaultTableModel model;
 
     public PanelBarang() {
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(0, 12));
         setBackground(MainFrame.C_BG);
-        setBorder(BorderFactory.createEmptyBorder(24, 24, 24, 24));
+        setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
 
-        JLabel judul = new JLabel("📦  Manajemen Barang");
+        // Judul
+        JLabel judul = new JLabel("Manajemen Barang");
         judul.setFont(new Font("Segoe UI", Font.BOLD, 20));
         judul.setForeground(new Color(0x1A, 0x1A, 0x2E));
-        judul.setBorder(BorderFactory.createEmptyBorder(0, 0, 18, 0));
+        judul.setBorder(BorderFactory.createEmptyBorder(0, 0, 6, 0));
         add(judul, BorderLayout.NORTH);
 
-        // ── Form ────────────────────────────────────────────────────────────
+        // Form Box
         JPanel formBox = MainFrame.makeWhiteBox();
-        formBox.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(6, 8, 6, 8);
-        gbc.anchor = GridBagConstraints.WEST;
+        formBox.setLayout(new BorderLayout(0, 6));
 
-        tfNama  = MainFrame.makeTextField();
-        tfNama.setPreferredSize(new Dimension(300, 30));
-        tfHarga = MainFrame.makeTextField();
+        // Baris field input
+        JPanel fieldRow = new JPanel(new GridLayout(1, 4, 6, 0));
+        fieldRow.setBackground(Color.WHITE);
 
-        gbc.gridx = 0; gbc.gridy = 0; formBox.add(MainFrame.makeFieldLabel("Nama Barang *"), gbc);
-        gbc.gridx = 1;                formBox.add(tfNama, gbc);
-        gbc.gridx = 2;                formBox.add(MainFrame.makeFieldLabel("Harga Satuan *"), gbc);
-        gbc.gridx = 3;                formBox.add(tfHarga, gbc);
+        tfNama = new JTextField();
+        tfNama.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        tfNama.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(0xBB, 0xC8, 0xD8), 1),
+            BorderFactory.createEmptyBorder(4, 8, 4, 8)
+        ));
 
-        JButton btnTambah = MainFrame.makeSuccessBtn("➕  Tambah");
-        JButton btnUpdate = MainFrame.makeWarnBtn("✏️  Update");
-        JButton btnHapus  = MainFrame.makeDangerBtn("🗑  Hapus");
-        JButton btnTampil = MainFrame.makePrimaryBtn("🔍  Tampilkan");
-        JButton btnBersih = new JButton("✖  Bersihkan");
-        btnBersih.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnBersih.setPreferredSize(new Dimension(110, 32));
-        btnBersih.setFocusPainted(false);
+        tfHarga = new JTextField();
+        tfHarga.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        tfHarga.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(0xBB, 0xC8, 0xD8), 1),
+            BorderFactory.createEmptyBorder(4, 8, 4, 8)
+        ));
 
-        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 0));
-        btnPanel.setBackground(Color.WHITE);
-        btnPanel.add(btnTambah); btnPanel.add(btnUpdate); btnPanel.add(btnHapus);
-        btnPanel.add(btnTampil); btnPanel.add(btnBersih);
-        gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 4;
-        formBox.add(btnPanel, gbc);
+        JLabel lblNama = new JLabel("Nama Barang *");
+        lblNama.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lblNama.setForeground(new Color(0x37, 0x47, 0x5A));
 
-        // ── Tabel ───────────────────────────────────────────────────────────
+        JLabel lblHarga = new JLabel("Harga Satuan *");
+        lblHarga.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lblHarga.setForeground(new Color(0x37, 0x47, 0x5A));
+
+        fieldRow.add(lblNama);
+        fieldRow.add(tfNama);
+        fieldRow.add(lblHarga);
+        fieldRow.add(tfHarga);
+
+        // Baris tombol
+        JButton btnTambah = new JButton("Tambah");
+        JButton btnUpdate = new JButton("Update");
+        JButton btnHapus  = new JButton("Hapus");
+        JButton btnTampil = new JButton("Tampilkan");
+        JButton btnBersih = new JButton("Bersihkan");
+
+        for (JButton b : new JButton[]{btnTambah, btnUpdate, btnHapus, btnTampil, btnBersih}) {
+            b.setFont(new Font("Segoe UI", Font.BOLD, 12));
+            b.setForeground(Color.WHITE);
+            b.setFocusPainted(false);
+            b.setBorderPainted(false);
+            b.setOpaque(true);
+            b.setPreferredSize(new Dimension(100, 34));
+            b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+        btnTambah.setBackground(new Color(0x2E, 0x7D, 0x32));
+        btnUpdate.setBackground(new Color(0xF5, 0x7C, 0x00));
+        btnHapus .setBackground(new Color(0xE5, 0x39, 0x35));
+        btnTampil.setBackground(new Color(0x1A, 0x73, 0xE8));
+        btnBersih.setBackground(new Color(0x60, 0x7D, 0x8B));
+
+        JPanel btnRow = new JPanel(new GridLayout(1, 5, 8, 0));
+        btnRow.setBackground(Color.WHITE);
+        btnRow.setPreferredSize(new Dimension(0, 36));
+        btnRow.add(btnTambah);
+        btnRow.add(btnUpdate);
+        btnRow.add(btnHapus);
+        btnRow.add(btnTampil);
+        btnRow.add(btnBersih);
+
+        formBox.add(fieldRow, BorderLayout.CENTER);
+        formBox.add(btnRow,   BorderLayout.SOUTH);
+
+        // Tabel
         model = new DefaultTableModel(new String[]{"Nama Barang", "Harga Satuan (Rp)"}, 0) {
             public boolean isCellEditable(int r, int c) { return false; }
         };
@@ -69,23 +107,23 @@ public class PanelBarang extends JPanel {
         });
 
         JScrollPane scroll = new JScrollPane(table);
-        scroll.setBorder(BorderFactory.createLineBorder(new Color(0xE0, 0xE5, 0xEF), 1, true));
+        scroll.setBorder(BorderFactory.createLineBorder(new Color(0xE0, 0xE5, 0xEF)));
 
         JPanel tableBox = MainFrame.makeWhiteBox();
-        tableBox.setLayout(new BorderLayout());
-        JLabel tblTitle = new JLabel("  Daftar Barang");
+        tableBox.setLayout(new BorderLayout(0, 8));
+        JLabel tblTitle = new JLabel("Daftar Barang");
         tblTitle.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        tblTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 8, 0));
+        tblTitle.setForeground(new Color(0x1A, 0x1A, 0x2E));
         tableBox.add(tblTitle, BorderLayout.NORTH);
-        tableBox.add(scroll, BorderLayout.CENTER);
+        tableBox.add(scroll,   BorderLayout.CENTER);
 
-        JSplitPane split = new JSplitPane(JSplitPane.VERTICAL_SPLIT, formBox, tableBox);
-        split.setDividerLocation(110);
-        split.setDividerSize(6);
-        split.setBorder(null);
-        add(split, BorderLayout.CENTER);
+        JPanel centerPanel = new JPanel(new BorderLayout(0, 10));
+        centerPanel.setBackground(MainFrame.C_BG);
+        centerPanel.add(formBox,  BorderLayout.NORTH);
+        centerPanel.add(tableBox, BorderLayout.CENTER);
+        add(centerPanel, BorderLayout.CENTER);
 
-        // ── Listeners ───────────────────────────────────────────────────────
+        // Listeners
         btnTampil.addActionListener(e -> loadData());
         btnBersih.addActionListener(e -> clearForm());
         btnTambah.addActionListener(e -> tambah());
