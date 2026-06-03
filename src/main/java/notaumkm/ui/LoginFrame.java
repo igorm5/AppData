@@ -1,0 +1,298 @@
+package notaumkm.ui;
+
+import notaumkm.db.AdminDAO;
+import notaumkm.model.Admin;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.SQLException;
+import java.util.concurrent.ExecutionException;
+
+/**
+ * LoginFrame
+ * Halaman login awal aplikasi.
+ * Memvalidasi kredensial dan mengarahkan ke halaman sesuai role.
+ */
+public class LoginFrame extends JFrame {
+
+    // ── Komponen UI ──────────────────────────────────────────────────────────
+    private JTextField     txtUsername;
+    private JPasswordField txtPassword;
+    private JButton        btnLogin;
+    private JLabel         lblStatus;
+
+    // ── DAO ──────────────────────────────────────────────────────────────────
+    private final AdminDAO adminDAO = new AdminDAO();
+
+    // ── Warna tema ───────────────────────────────────────────────────────────
+    private static final Color CLR_DARK     = new Color(27,  44,  56);   // Header gelap
+    private static final Color CLR_GREEN    = new Color(52, 120,  77);   // Aksen hijau
+    private static final Color CLR_BG       = new Color(245, 247, 250);  // Background
+    private static final Color CLR_WHITE    = Color.WHITE;
+    private static final Color CLR_ERROR    = new Color(200, 50, 50);
+
+    // ── Konstruktor ──────────────────────────────────────────────────────────
+
+    public LoginFrame() {
+        initUI();
+    }
+
+    // ── Inisialisasi UI ──────────────────────────────────────────────────────
+
+    private void initUI() {
+        setTitle("Login — SISTEM KASIR");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setSize(420, 500);
+        setLocationRelativeTo(null); // Tampil di tengah layar
+        setResizable(false);
+
+        // ── Panel utama ──────────────────────────────────────────────────────
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(CLR_BG);
+
+        // ── Header ───────────────────────────────────────────────────────────
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(CLR_DARK);
+        headerPanel.setBorder(new EmptyBorder(30, 30, 30, 30));
+
+        JLabel lblTitle = new JLabel("SISTEM KASIR", SwingConstants.CENTER);
+        lblTitle.setForeground(CLR_WHITE);
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 22));
+
+        JLabel lblSub = new JLabel("Point of Sale & Manajemen Database Stock", SwingConstants.CENTER);
+        lblSub.setForeground(new Color(180, 200, 190));
+        lblSub.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+
+        headerPanel.add(lblTitle, BorderLayout.CENTER);
+        headerPanel.add(lblSub,   BorderLayout.SOUTH);
+
+        // ── Form panel ───────────────────────────────────────────────────────
+        JPanel formPanel = new JPanel();
+        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
+        formPanel.setBackground(CLR_WHITE);
+        formPanel.setBorder(new EmptyBorder(30, 40, 30, 40));
+
+        // Label & field username
+        formPanel.add(buatLabel("Username"));
+        formPanel.add(Box.createVerticalStrut(6));
+        txtUsername = buatTextField("Masukkan username...");
+        formPanel.add(txtUsername);
+        formPanel.add(Box.createVerticalStrut(16));
+
+        // Label & field password
+        formPanel.add(buatLabel("Password"));
+        formPanel.add(Box.createVerticalStrut(6));
+        txtPassword = new JPasswordField();
+        styleTextField(txtPassword);
+        formPanel.add(txtPassword);
+        formPanel.add(Box.createVerticalStrut(24));
+
+        // Tombol login
+        btnLogin = new JButton("MASUK");
+        btnLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnLogin.setMaximumSize(new Dimension(Integer.MAX_VALUE, 44));
+        btnLogin.setBackground(CLR_GREEN);
+        btnLogin.setForeground(CLR_WHITE);
+        btnLogin.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnLogin.setBorderPainted(false);
+        btnLogin.setFocusPainted(false);
+        btnLogin.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnLogin.addActionListener(e -> prosesLogin());
+        formPanel.add(btnLogin);
+        formPanel.add(Box.createVerticalStrut(14));
+
+        // Label status error
+        lblStatus = new JLabel(" ", SwingConstants.CENTER);
+        lblStatus.setForeground(CLR_ERROR);
+        lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        lblStatus.setAlignmentX(Component.CENTER_ALIGNMENT);
+        formPanel.add(lblStatus);
+
+        // ── Info akun demo ────────────────────────────────────────────────────
+        JPanel infoPanel = new JPanel(new GridLayout(3, 1, 0, 4));
+        infoPanel.setBackground(new Color(235, 245, 238));
+        infoPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(150, 200, 160), 1),
+            new EmptyBorder(10, 15, 10, 15)
+        ));
+
+        JLabel lblInfo = new JLabel("Akun Demo:", SwingConstants.LEFT);
+        lblInfo.setFont(new Font("Segoe UI", Font.BOLD, 11));
+        lblInfo.setForeground(CLR_DARK);
+        infoPanel.add(lblInfo);
+
+        JLabel lblKasir = new JLabel("  Kasir    : kasir1 / kasir123");
+        lblKasir.setFont(new Font("Monospaced", Font.PLAIN, 11));
+        infoPanel.add(lblKasir);
+
+        JLabel lblKelola = new JLabel("  Pengelola: pengelola / kelola123");
+        lblKelola.setFont(new Font("Monospaced", Font.PLAIN, 11));
+        infoPanel.add(lblKelola);
+
+        formPanel.add(Box.createVerticalStrut(16));
+        formPanel.add(infoPanel);
+
+        // ── Footer ────────────────────────────────────────────────────────────
+        JLabel lblFooter = new JLabel("© 2026 Sistem Nota UMKM", SwingConstants.CENTER);
+        lblFooter.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        lblFooter.setForeground(new Color(150, 160, 165));
+        lblFooter.setBorder(new EmptyBorder(8, 0, 8, 0));
+
+        // ── Susun layout ─────────────────────────────────────────────────────
+        mainPanel.add(headerPanel, BorderLayout.NORTH);
+
+        // Bungkus formPanel agar selalu berada di tengah vertikal
+        JPanel centerWrapper = new JPanel();
+        centerWrapper.setLayout(new BoxLayout(centerWrapper, BoxLayout.Y_AXIS));
+        centerWrapper.setBackground(CLR_BG);
+        centerWrapper.add(Box.createVerticalGlue());
+        formPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centerWrapper.add(formPanel);
+        centerWrapper.add(Box.createVerticalGlue());
+
+        mainPanel.add(centerWrapper, BorderLayout.CENTER);
+        mainPanel.add(lblFooter,   BorderLayout.SOUTH);
+
+        add(mainPanel);
+
+        // Enter key → login
+        KeyAdapter enterKey = new KeyAdapter() {
+            @Override public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) prosesLogin();
+            }
+        };
+        txtUsername.addKeyListener(enterKey);
+        txtPassword.addKeyListener(enterKey);
+
+        // Hover efek tombol
+        btnLogin.addMouseListener(new MouseAdapter() {
+            @Override public void mouseEntered(MouseEvent e) {
+                btnLogin.setBackground(new Color(40, 100, 60));
+            }
+            @Override public void mouseExited(MouseEvent e) {
+                btnLogin.setBackground(CLR_GREEN);
+            }
+        });
+    }
+
+    // ── Logika login ─────────────────────────────────────────────────────────
+
+    /**
+     * Memproses klik tombol Login:
+     * 1. Validasi input tidak kosong
+     * 2. Query ke DB via AdminDAO
+     * 3. Arahkan ke halaman sesuai role
+     */
+    private void prosesLogin() {
+        String username = txtUsername.getText().trim();
+        String password = new String(txtPassword.getPassword()).trim();
+
+        // Validasi input kosong
+        if (username.isEmpty() || password.isEmpty()) {
+            lblStatus.setText("Username dan password wajib diisi!");
+            return;
+        }
+
+        btnLogin.setEnabled(false);
+        lblStatus.setText("Memverifikasi...");
+
+        // Proses di background thread agar UI tidak freeze
+        SwingWorker<Admin, Void> worker = new SwingWorker<>() {
+            @Override
+            protected Admin doInBackground() throws Exception {
+                return adminDAO.login(username, password);
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    Admin admin = get();
+                    if (admin != null) {
+                        lblStatus.setForeground(new Color(50, 150, 80));
+                        lblStatus.setText("Login berhasil! Memuat aplikasi...");
+
+                        // Buka frame sesuai role
+                        Timer timer = new Timer(600, evt -> {
+                            dispose(); // Tutup halaman login
+                            if (admin.isKasir()) {
+                                new KasirFrame(admin).setVisible(true);
+                            } else {
+                                new PengelolaStokFrame(admin).setVisible(true);
+                            }
+                        });
+                        timer.setRepeats(false);
+                        timer.start();
+
+                    } else {
+                        lblStatus.setForeground(new Color(200, 50, 50));
+                        lblStatus.setText("Username atau password salah!");
+                        txtPassword.setText("");
+                        btnLogin.setEnabled(true);
+                    }
+                } catch (ExecutionException ex) {
+                    Throwable cause = ex.getCause();
+                    lblStatus.setForeground(new Color(200, 50, 50));
+                    if (cause instanceof SQLException) {
+                        lblStatus.setText("Error koneksi DB: " + cause.getMessage());
+                    } else {
+                        lblStatus.setText("Error internal: " + cause.getMessage());
+                    }
+                    btnLogin.setEnabled(true);
+                } catch (InterruptedException ex) {
+                    lblStatus.setForeground(new Color(200, 50, 50));
+                    lblStatus.setText("Proses login terinterupsi.");
+                    btnLogin.setEnabled(true);
+                    Thread.currentThread().interrupt();
+                }
+            }
+        };
+        worker.execute();
+    }
+
+    // ── Helper UI ────────────────────────────────────────────────────────────
+
+    private JLabel buatLabel(String teks) {
+        JLabel lbl = new JLabel(teks);
+        lbl.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lbl.setForeground(new Color(60, 70, 80));
+        lbl.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lbl.setHorizontalAlignment(SwingConstants.CENTER);
+        return lbl;
+    }
+
+    private JTextField buatTextField(String placeholder) {
+        JTextField tf = new JTextField();
+        styleTextField(tf);
+        // Placeholder sederhana via FocusListener
+        tf.setForeground(new Color(160, 170, 180));
+        tf.setText(placeholder);
+        tf.addFocusListener(new FocusAdapter() {
+            @Override public void focusGained(FocusEvent e) {
+                if (tf.getText().equals(placeholder)) {
+                    tf.setText("");
+                    tf.setForeground(Color.BLACK);
+                }
+            }
+            @Override public void focusLost(FocusEvent e) {
+                if (tf.getText().isEmpty()) {
+                    tf.setForeground(new Color(160, 170, 180));
+                    tf.setText(placeholder);
+                }
+            }
+        });
+        return tf;
+    }
+
+    private void styleTextField(JTextField tf) {
+        tf.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        tf.setPreferredSize(new Dimension(300, 40));
+        tf.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        tf.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(200, 210, 215), 1),
+            new EmptyBorder(5, 10, 5, 10)
+        ));
+        tf.setAlignmentX(Component.CENTER_ALIGNMENT);
+    }
+}
