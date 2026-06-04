@@ -430,7 +430,7 @@ public class KasirFrame extends JFrame {
                         keranjang.clear();
                         refreshKeranjang();
                         txtCustomer.setText("");
-                        muatDaftarBarang(); // Refresh stok di ComboBox
+                        muatDaftarBarang(); 
                         muatRiwayatTransaksi();
                         spnQty.setValue(1);
 

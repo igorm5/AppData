@@ -13,27 +13,18 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
 
-/**
- * PengelolaStokFrame
- * Halaman manajemen barang untuk role Pengelola Stok.
- * Fitur: tambah, ubah, hapus barang dan kelola stok.
- */
 public class PengelolaStokFrame extends JFrame {
-
-    // ── Komponen UI ──────────────────────────────────────────────────────────
     private JTable          tblBarang;
     private DefaultTableModel tabelModel;
     private JTextField      txtNama, txtHarga, txtStok, txtCari;
     private JButton         btnTambah, btnUpdate, btnHapus, btnBersihkan, btnLogout;
     private JLabel          lblStatus;
 
-    // ── Data & DAO ────────────────────────────────────────────────────────────
     private final Admin     adminLogin;
     private final BarangDAO barangDAO = new BarangDAO();
     private List<Barang>    dataBarang;
     private Barang          selectedBarang = null;
 
-    // ── Warna tema ────────────────────────────────────────────────────────────
     private static final Color CLR_DARK    = new Color(27,  44,  56);
     private static final Color CLR_GREEN   = new Color(52, 120,  77);
     private static final Color CLR_ORANGE  = new Color(200, 100,  30);
@@ -41,15 +32,11 @@ public class PengelolaStokFrame extends JFrame {
     private static final Color CLR_BG      = new Color(245, 247, 250);
     private static final Color CLR_WHITE   = Color.WHITE;
 
-    // ── Konstruktor ───────────────────────────────────────────────────────────
-
     public PengelolaStokFrame(Admin admin) {
         this.adminLogin = admin;
         initUI();
         muatDataBarang();
     }
-
-    // ── Inisialisasi UI ───────────────────────────────────────────────────────
 
     private void initUI() {
         setTitle("Pengelola Stok — " + adminLogin.getUsername());
@@ -58,12 +45,11 @@ public class PengelolaStokFrame extends JFrame {
         setLocationRelativeTo(null);
         setBackground(CLR_BG);
 
-        // ── Header ────────────────────────────────────────────────────────────
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(CLR_DARK);
         header.setBorder(new EmptyBorder(12, 20, 12, 20));
 
-        JLabel lblJudul = new JLabel("⚙  Manajemen Data Barang");
+        JLabel lblJudul = new JLabel("Manajemen Data Barang");
         lblJudul.setForeground(CLR_WHITE);
         lblJudul.setFont(new Font("Segoe UI", Font.BOLD, 18));
         header.add(lblJudul, BorderLayout.WEST);
@@ -74,7 +60,6 @@ public class PengelolaStokFrame extends JFrame {
         lblUser.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         header.add(lblUser, BorderLayout.EAST);
 
-        // ── Panel kiri: form input ─────────────────────────────────────────────
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setBackground(CLR_WHITE);
@@ -102,7 +87,6 @@ public class PengelolaStokFrame extends JFrame {
         formPanel.add(txtStok);
         formPanel.add(Box.createVerticalStrut(20));
 
-        // Tombol-tombol aksi
         btnTambah    = buatTombol("Tambah Baru",    CLR_GREEN);
         btnUpdate    = buatTombol("Simpan Perubahan", CLR_ORANGE);
         btnHapus     = buatTombol("Hapus Barang",   CLR_RED);
@@ -120,21 +104,18 @@ public class PengelolaStokFrame extends JFrame {
         formPanel.add(btnBersihkan);
         formPanel.add(Box.createVerticalGlue());
 
-        // Label status
         lblStatus = new JLabel(" ");
         lblStatus.setFont(new Font("Segoe UI", Font.ITALIC, 11));
         lblStatus.setForeground(CLR_GREEN);
         formPanel.add(lblStatus);
 
-        // ── Panel kanan: tabel barang ──────────────────────────────────────────
         JPanel rightPanel = new JPanel(new BorderLayout(0, 8));
         rightPanel.setBackground(CLR_BG);
         rightPanel.setBorder(new EmptyBorder(12, 12, 12, 12));
 
-        // Search bar
         JPanel searchPanel = new JPanel(new BorderLayout(8, 0));
         searchPanel.setBackground(CLR_BG);
-        JLabel lblCari = new JLabel("🔍 Cari:");
+        JLabel lblCari = new JLabel("Cari:");
         lblCari.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         txtCari = new JTextField();
         txtCari.setFont(new Font("Segoe UI", Font.PLAIN, 13));
@@ -150,12 +131,10 @@ public class PengelolaStokFrame extends JFrame {
         searchPanel.add(lblCari, BorderLayout.WEST);
         searchPanel.add(txtCari, BorderLayout.CENTER);
 
-        // Logout di kanan
-        btnLogout = buatTombol("⏻ Logout", new Color(80, 90, 100));
+        btnLogout = buatTombol("Logout", new Color(80, 90, 100));
         btnLogout.setPreferredSize(new Dimension(90, 36));
         searchPanel.add(btnLogout, BorderLayout.EAST);
 
-        // Tabel
         String[] kolom = {"#", "Nama Barang", "Harga Satuan", "Stok"};
         tabelModel = new DefaultTableModel(kolom, 0) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
@@ -169,7 +148,6 @@ public class PengelolaStokFrame extends JFrame {
         rightPanel.add(searchPanel,  BorderLayout.NORTH);
         rightPanel.add(scrollPane,   BorderLayout.CENTER);
 
-        // ── Layout utama ──────────────────────────────────────────────────────
         JPanel body = new JPanel(new BorderLayout());
         body.add(formPanel,  BorderLayout.WEST);
         body.add(rightPanel, BorderLayout.CENTER);
@@ -177,20 +155,16 @@ public class PengelolaStokFrame extends JFrame {
         add(header, BorderLayout.NORTH);
         add(body,   BorderLayout.CENTER);
 
-        // ── Event listener ────────────────────────────────────────────────────
         btnTambah.addActionListener   (e -> prosesTabah());
         btnUpdate.addActionListener   (e -> prosesUpdate());
         btnHapus.addActionListener    (e -> prosesHapus());
         btnBersihkan.addActionListener(e -> bersihkanForm());
         btnLogout.addActionListener   (e -> logout());
 
-        // Klik baris tabel → isi form
         tblBarang.getSelectionModel().addListSelectionListener(evt -> {
             if (!evt.getValueIsAdjusting()) isiFormDariTabel();
         });
     }
-
-    // ── Muat data ─────────────────────────────────────────────────────────────
 
     private void muatDataBarang() {
         dataBarang = barangDAO.getAll();
@@ -221,8 +195,6 @@ public class PengelolaStokFrame extends JFrame {
             .toList();
         refreshTabel(filtered);
     }
-
-    // ── Aksi CRUD ──────────────────────────────────────────────────────────────
 
     private void prosesTabah() {
         String nama = txtNama.getText().trim();
@@ -311,7 +283,6 @@ public class PengelolaStokFrame extends JFrame {
         lblStatus.setText(" ");
     }
 
-    /** Isi form dari baris yang dipilih di tabel */
     private void isiFormDariTabel() {
         int row = tblBarang.getSelectedRow();
         if (row < 0) return;
@@ -341,8 +312,6 @@ public class PengelolaStokFrame extends JFrame {
         lblStatus.setForeground(error ? CLR_RED : CLR_GREEN);
     }
 
-    // ── Helper UI ─────────────────────────────────────────────────────────────
-
     private void styleTable() {
         tblBarang.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         tblBarang.setRowHeight(28);
@@ -354,9 +323,7 @@ public class PengelolaStokFrame extends JFrame {
         tblBarang.setShowGrid(true);
         tblBarang.setFillsViewportHeight(true);
 
-        // Kolom # sempit
         tblBarang.getColumnModel().getColumn(0).setMaxWidth(40);
-        // Kolom stok: warna merah jika rendah
         tblBarang.getColumnModel().getColumn(3).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable t, Object v,
