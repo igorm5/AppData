@@ -20,8 +20,8 @@ public class LoginFrame extends JFrame {
     private final AdminDAO adminDAO = new AdminDAO();
 
     private static final Color CLR_DARK     = new Color(27,  44,  56);  
-    private static final Color CLR_GREEN    = new Color(52, 120,  77);   // Aksen hijau
-    private static final Color CLR_BG       = new Color(245, 247, 250);  // Background
+    private static final Color CLR_GREEN    = new Color(52, 120,  77);    
+    private static final Color CLR_BG       = new Color(245, 247, 250);  
     private static final Color CLR_WHITE    = Color.WHITE;
     private static final Color CLR_ERROR    = new Color(200, 50, 50);
 
@@ -33,7 +33,7 @@ public class LoginFrame extends JFrame {
         setTitle("Login — SISTEM KASIR");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(420, 500);
-        setLocationRelativeTo(null); // Tampil di tengah layar
+        setLocationRelativeTo(null); 
         setResizable(false);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
