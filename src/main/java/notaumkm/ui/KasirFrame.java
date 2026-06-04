@@ -128,7 +128,7 @@ public class KasirFrame extends JFrame {
         pilihPanel.add(cmbBarang);
         pilihPanel.add(Box.createVerticalStrut(6));
 
-        lblStokInfo = new JLabel(" ");
+        lblStokInfo = new JLabel("Stok tersedia: 0   |   Rp 0/satuan");
         lblStokInfo.setFont(new Font("Segoe UI", Font.ITALIC, 11));
         lblStokInfo.setForeground(new Color(100, 120, 130));
         pilihPanel.add(lblStokInfo);
@@ -290,7 +290,11 @@ public class KasirFrame extends JFrame {
 
     private void tampilInfoStok() {
         Barang terpilih = (Barang) cmbBarang.getSelectedItem();
-        if (terpilih == null) return;
+        if (terpilih == null) {
+            lblStokInfo.setText("Stok tersedia: 0   |   Rp 0/satuan");
+            lblStokInfo.setForeground(new Color(100, 120, 130));
+            return;
+        }
         lblStokInfo.setText("Stok tersedia: " + terpilih.getStok()
                             + "   |   " + FormatUtil.rupiah(terpilih.getHargaSatuan()) + "/satuan");
         lblStokInfo.setForeground(terpilih.getStok() < 5
