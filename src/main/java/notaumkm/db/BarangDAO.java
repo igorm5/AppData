@@ -6,20 +6,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * BarangDAO
- * Data Access Object untuk tabel barang.
- * Menyediakan operasi CRUD dan pengurangan stok.
- */
 public class BarangDAO {
 
-    // ── SELECT ALL ───────────────────────────────────────────────────────────
-
-    /**
-     * Mengambil semua data barang dari database.
-     *
-     * @return List berisi semua objek Barang
-     */
     public List<Barang> getAll() {
         List<Barang> list = new ArrayList<>();
         String sql = "SELECT id_barang, nama_barang, harga_satuan, stok "
@@ -38,14 +26,6 @@ public class BarangDAO {
         return list;
     }
 
-    // ── SELECT BY ID ─────────────────────────────────────────────────────────
-
-    /**
-     * Mengambil data barang berdasarkan nama_barang (primary key bisnis).
-     *
-     * @param namaBarang nama barang yang dicari
-     * @return objek Barang atau null jika tidak ditemukan
-     */
     public Barang getByNama(String namaBarang) {
         String sql = "SELECT id_barang, nama_barang, harga_satuan, stok "
                    + "FROM barang WHERE nama_barang = ?";
@@ -63,14 +43,6 @@ public class BarangDAO {
         return null;
     }
 
-    // ── INSERT ───────────────────────────────────────────────────────────────
-
-    /**
-     * Menambahkan barang baru ke database.
-     *
-     * @param b objek Barang yang akan disimpan
-     * @return true jika berhasil
-     */
     public boolean insert(Barang b) {
         String sql = "INSERT INTO barang (nama_barang, harga_satuan, stok) VALUES (?, ?, ?)";
 
@@ -88,14 +60,6 @@ public class BarangDAO {
         }
     }
 
-    // ── UPDATE ───────────────────────────────────────────────────────────────
-
-    /**
-     * Memperbarui data barang (harga dan stok) berdasarkan id_barang.
-     *
-     * @param b objek Barang dengan data terbaru
-     * @return true jika berhasil
-     */
     public boolean update(Barang b) {
         String sql = "UPDATE barang SET nama_barang = ?, harga_satuan = ?, stok = ? "
                    + "WHERE id_barang = ?";
@@ -115,14 +79,6 @@ public class BarangDAO {
         }
     }
 
-    // ── DELETE ───────────────────────────────────────────────────────────────
-
-    /**
-     * Menghapus barang berdasarkan id_barang.
-     *
-     * @param idBarang ID barang yang akan dihapus
-     * @return true jika berhasil
-     */
     public boolean delete(int idBarang) {
         String sql = "DELETE FROM barang WHERE id_barang = ?";
 
@@ -137,16 +93,6 @@ public class BarangDAO {
         }
     }
 
-    // ── KURANGI STOK ─────────────────────────────────────────────────────────
-
-    /**
-     * Mengurangi stok barang setelah transaksi berhasil.
-     * Validasi stok cukup dilakukan sebelum memanggil metode ini.
-     *
-     * @param namaBarang nama barang
-     * @param qty        jumlah yang dibeli
-     * @return true jika berhasil dikurangi
-     */
     public boolean kurangiStok(Connection conn, String namaBarang, int qty) throws SQLException {
         String sql = "UPDATE barang SET stok = stok - ? "
                    + "WHERE nama_barang = ? AND stok >= ?";
@@ -154,15 +100,11 @@ public class BarangDAO {
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt   (1, qty);
             ps.setString(2, namaBarang);
-            ps.setInt   (3, qty);          // Jaminan stok tidak negatif
-
-            return ps.executeUpdate() > 0; // Jika 0 = stok tidak mencukupi
+            ps.setInt   (3, qty);          
+            return ps.executeUpdate() > 0;
         }
     }
 
-    // ── HELPER ───────────────────────────────────────────────────────────────
-
-    /** Memetakan satu baris ResultSet ke objek Barang */
     private Barang mapRow(ResultSet rs) throws SQLException {
         return new Barang(
             rs.getInt   ("id_barang"),

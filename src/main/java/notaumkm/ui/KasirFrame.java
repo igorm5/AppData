@@ -41,7 +41,6 @@ public class KasirFrame extends JFrame {
     private static final Color CLR_DARK     = new Color(27,  44,  56);
     private static final Color CLR_GREEN    = new Color(52, 120,  77);
     private static final Color CLR_RED      = new Color(190,  50,  50);
-    private static final Color CLR_ORANGE   = new Color(200, 100,  30);
     private static final Color CLR_BG       = new Color(245, 247, 250);
     private static final Color CLR_WHITE    = Color.WHITE;
 

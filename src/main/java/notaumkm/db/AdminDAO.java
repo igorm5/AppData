@@ -7,22 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- * AdminDAO
- * Data Access Object untuk tabel admin.
- * Menangani autentikasi login.
- */
 public class AdminDAO {
 
-    /**
-     * Memvalidasi username dan password admin.
-     * Menggunakan PreparedStatement untuk mencegah SQL Injection.
-     *
-     * @param username username yang diinput
-     * @param password password yang diinput (plaintext — pertimbangkan hashing di produksi)
-     * @return objek Admin jika valid, null jika tidak cocok
-     * @throws SQLException jika terjadi kesalahan koneksi atau query
-     */
     public Admin login(String username, String password) throws SQLException {
         String sql = "SELECT id_admin, username, role FROM admin "
                    + "WHERE username = ? AND password = ?";
@@ -43,6 +29,6 @@ public class AdminDAO {
                 }
             }
         }
-        return null; // Login gagal
+        return null; 
     }
 }

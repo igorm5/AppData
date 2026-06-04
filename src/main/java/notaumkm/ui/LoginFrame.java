@@ -25,13 +25,9 @@ public class LoginFrame extends JFrame {
     private static final Color CLR_WHITE    = Color.WHITE;
     private static final Color CLR_ERROR    = new Color(200, 50, 50);
 
-    // ── Konstruktor ──────────────────────────────────────────────────────────
-
     public LoginFrame() {
         initUI();
     }
-
-    // ── Inisialisasi UI ──────────────────────────────────────────────────────
 
     private void initUI() {
         setTitle("Login — SISTEM KASIR");
@@ -40,11 +36,9 @@ public class LoginFrame extends JFrame {
         setLocationRelativeTo(null); // Tampil di tengah layar
         setResizable(false);
 
-        // ── Panel utama ──────────────────────────────────────────────────────
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(CLR_BG);
 
-        // ── Header ───────────────────────────────────────────────────────────
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(CLR_DARK);
         headerPanel.setBorder(new EmptyBorder(30, 30, 30, 30));
@@ -60,20 +54,17 @@ public class LoginFrame extends JFrame {
         headerPanel.add(lblTitle, BorderLayout.CENTER);
         headerPanel.add(lblSub,   BorderLayout.SOUTH);
 
-        // ── Form panel ───────────────────────────────────────────────────────
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setBackground(CLR_WHITE);
         formPanel.setBorder(new EmptyBorder(30, 40, 30, 40));
 
-        // Label & field username
         formPanel.add(buatLabel("Username"));
         formPanel.add(Box.createVerticalStrut(6));
         txtUsername = buatTextField("Masukkan username...");
         formPanel.add(txtUsername);
         formPanel.add(Box.createVerticalStrut(16));
 
-        // Label & field password
         formPanel.add(buatLabel("Password"));
         formPanel.add(Box.createVerticalStrut(6));
         txtPassword = new JPasswordField();
@@ -81,7 +72,6 @@ public class LoginFrame extends JFrame {
         formPanel.add(txtPassword);
         formPanel.add(Box.createVerticalStrut(24));
 
-        // Tombol login
         btnLogin = new JButton("MASUK");
         btnLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnLogin.setMaximumSize(new Dimension(Integer.MAX_VALUE, 44));
@@ -95,7 +85,6 @@ public class LoginFrame extends JFrame {
         formPanel.add(btnLogin);
         formPanel.add(Box.createVerticalStrut(14));
 
-        // Label status error
         lblStatus = new JLabel(" ", SwingConstants.CENTER);
         lblStatus.setForeground(CLR_ERROR);
         lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 12));
@@ -126,16 +115,13 @@ public class LoginFrame extends JFrame {
         // formPanel.add(Box.createVerticalStrut(16));
         // formPanel.add(infoPanel);
 
-        // ── Footer ────────────────────────────────────────────────────────────
         JLabel lblFooter = new JLabel("© 2026 Sistem Nota UMKM", SwingConstants.CENTER);
         lblFooter.setFont(new Font("Segoe UI", Font.PLAIN, 11));
         lblFooter.setForeground(new Color(150, 160, 165));
         lblFooter.setBorder(new EmptyBorder(8, 0, 8, 0));
 
-        // ── Susun layout ─────────────────────────────────────────────────────
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // Bungkus formPanel agar selalu berada di tengah vertikal
         JPanel centerWrapper = new JPanel();
         centerWrapper.setLayout(new BoxLayout(centerWrapper, BoxLayout.Y_AXIS));
         centerWrapper.setBackground(CLR_BG);
@@ -149,7 +135,6 @@ public class LoginFrame extends JFrame {
 
         add(mainPanel);
 
-        // Enter key → login
         KeyAdapter enterKey = new KeyAdapter() {
             @Override public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) prosesLogin();
@@ -158,7 +143,6 @@ public class LoginFrame extends JFrame {
         txtUsername.addKeyListener(enterKey);
         txtPassword.addKeyListener(enterKey);
 
-        // Hover efek tombol
         btnLogin.addMouseListener(new MouseAdapter() {
             @Override public void mouseEntered(MouseEvent e) {
                 btnLogin.setBackground(new Color(40, 100, 60));
@@ -169,19 +153,10 @@ public class LoginFrame extends JFrame {
         });
     }
 
-    // ── Logika login ─────────────────────────────────────────────────────────
-
-    /**
-     * Memproses klik tombol Login:
-     * 1. Validasi input tidak kosong
-     * 2. Query ke DB via AdminDAO
-     * 3. Arahkan ke halaman sesuai role
-     */
     private void prosesLogin() {
         String username = txtUsername.getText().trim();
         String password = new String(txtPassword.getPassword()).trim();
 
-        // Validasi input kosong
         if (username.isEmpty() || password.isEmpty()) {
             lblStatus.setText("Username dan password wajib diisi!");
             return;
@@ -190,7 +165,6 @@ public class LoginFrame extends JFrame {
         btnLogin.setEnabled(false);
         lblStatus.setText("Memverifikasi...");
 
-        // Proses di background thread agar UI tidak freeze
         SwingWorker<Admin, Void> worker = new SwingWorker<>() {
             @Override
             protected Admin doInBackground() throws Exception {
@@ -205,9 +179,8 @@ public class LoginFrame extends JFrame {
                         lblStatus.setForeground(new Color(50, 150, 80));
                         lblStatus.setText("Login berhasil! Memuat aplikasi...");
 
-                        // Buka frame sesuai role
                         Timer timer = new Timer(600, evt -> {
-                            dispose(); // Tutup halaman login
+                            dispose(); 
                             if (admin.isKasir()) {
                                 new KasirFrame(admin).setVisible(true);
                             } else {
@@ -243,8 +216,6 @@ public class LoginFrame extends JFrame {
         worker.execute();
     }
 
-    // ── Helper UI ────────────────────────────────────────────────────────────
-
     private JLabel buatLabel(String teks) {
         JLabel lbl = new JLabel(teks);
         lbl.setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -257,7 +228,6 @@ public class LoginFrame extends JFrame {
     private JTextField buatTextField(String placeholder) {
         JTextField tf = new JTextField();
         styleTextField(tf);
-        // Placeholder sederhana via FocusListener
         tf.setForeground(new Color(160, 170, 180));
         tf.setText(placeholder);
         tf.addFocusListener(new FocusAdapter() {

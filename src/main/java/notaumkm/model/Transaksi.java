@@ -1,9 +1,5 @@
 package notaumkm.model;
 
-/**
- * Model Transaksi
- * Mewakili ringkasan transaksi untuk ditampilkan di riwayat.
- */
 public class Transaksi {
 
     private String noNota;

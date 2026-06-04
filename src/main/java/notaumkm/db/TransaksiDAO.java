@@ -9,40 +9,20 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * TransaksiDAO
- * Menangani penyimpanan transaksi ke tabel transaksi dan nota secara atomik
- * menggunakan transaction (commit/rollback).
- */
 public class TransaksiDAO {
 
     private final BarangDAO barangDAO = new BarangDAO();
 
-    /**
-     * Menyimpan seluruh transaksi secara atomik:
-     * 1. Insert ke tabel transaksi
-     * 2. Insert ke tabel nota (detail)
-     * 3. Kurangi stok barang
-     *
-     * Jika salah satu gagal, semua operasi di-rollback.
-     *
-     * @param namaCustomer nama pembeli
-     * @param kasir        nama kasir yang login
-     * @param items        daftar item belanja
-     * @param total        total harga keseluruhan
-     * @return noNota yang berhasil dibuat, atau null jika gagal
-     */
     public String simpanTransaksi(String namaCustomer, String kasir,
                                    List<ItemNota> items, double total) {
 
         Connection conn = null;
-        String noNota   = buatNoNota(); // Generate nomor nota unik
+        String noNota   = buatNoNota(); 
 
         try {
             conn = DBConnection.getConnection();
-            conn.setAutoCommit(false); // ─── Mulai transaksi DB ───
+            conn.setAutoCommit(false); 
 
-            // ── 1. Cek stok semua item sebelum proses ────────────────────────
             for (ItemNota item : items) {
                 if (!cekStokCukup(conn, item.getNamaBarang(), item.getQty())) {
                     conn.rollback();
@@ -51,36 +31,30 @@ public class TransaksiDAO {
                 }
             }
 
-            // ── 2. Insert header transaksi ───────────────────────────────────
             insertTransaksi(conn, noNota, namaCustomer, kasir, total);
 
-            // ── 3. Insert detail nota + kurangi stok ────────────────────────
             for (ItemNota item : items) {
                 insertNota(conn, noNota, item);
                 barangDAO.kurangiStok(conn, item.getNamaBarang(), item.getQty());
             }
 
-            conn.commit(); // ─── Commit jika semua berhasil ───
+            conn.commit(); 
             System.out.println("[TransaksiDAO] Transaksi berhasil: " + noNota);
             return noNota;
 
         } catch (SQLException e) {
             System.err.println("[TransaksiDAO] Error, rollback: " + e.getMessage());
             if (conn != null) {
-                try { conn.rollback(); } catch (SQLException ex) { /* abaikan */ }
+                try { conn.rollback(); } catch (SQLException ex) {}
             }
             return null;
         } finally {
-            // Kembalikan auto-commit ke normal
             if (conn != null) {
-                try { conn.setAutoCommit(true); } catch (SQLException ex) { /* abaikan */ }
+                try { conn.setAutoCommit(true); } catch (SQLException ex) {}
             }
         }
     }
 
-    // ── PRIVATE HELPERS ──────────────────────────────────────────────────────
-
-    /** Insert satu baris ke tabel transaksi */
     private void insertTransaksi(Connection conn, String noNota,
                                   String namaCustomer, String kasir, double total)
             throws SQLException {
@@ -97,7 +71,6 @@ public class TransaksiDAO {
         }
     }
 
-    /** Insert satu baris detail ke tabel nota */
     private void insertNota(Connection conn, String noNota, ItemNota item)
             throws SQLException {
 
@@ -112,7 +85,6 @@ public class TransaksiDAO {
         }
     }
 
-    /** Cek apakah stok mencukupi untuk qty yang diminta */
     private boolean cekStokCukup(Connection conn, String namaBarang, int qty)
             throws SQLException {
 
@@ -128,15 +100,10 @@ public class TransaksiDAO {
         return false;
     }
 
-    /**
-     * Membuat nomor nota unik berformat: C[MMYYYY]-[6-digit-counter]
-     * Contoh: C062026-000001
-     */
     private String buatNoNota() {
         LocalDateTime now = LocalDateTime.now();
         String prefix = now.format(DateTimeFormatter.ofPattern("MMyyyy"));
 
-        // Ambil counter dari DB untuk hari ini agar tidak duplikat
         String sql = "SELECT COUNT(*) + 1 AS counter FROM transaksi "
                    + "WHERE no_nota LIKE ?";
 
@@ -154,11 +121,9 @@ public class TransaksiDAO {
             System.err.println("[TransaksiDAO] buatNoNota error: " + e.getMessage());
         }
 
-        // Fallback jika DB error: gunakan timestamp
         return "C" + System.currentTimeMillis();
     }
 
-    /** Mengambil daftar riwayat transaksi terbaru. */
     public List<Transaksi> getRiwayatTransaksi() {
         List<Transaksi> riwayat = new ArrayList<>();
         String sql = "SELECT TOP 20 no_nota, CONVERT(VARCHAR(19), tanggal_jam, 120) AS tanggal_jam, "

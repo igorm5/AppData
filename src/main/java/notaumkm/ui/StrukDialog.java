@@ -2,11 +2,9 @@ package notaumkm.ui;
 
 import notaumkm.model.ItemNota;
 import notaumkm.util.FormatUtil;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.print.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,7 +17,6 @@ public class StrukDialog extends JDialog {
     private final List<ItemNota>  items;
     private final double          total;
     private final LocalDateTime   waktu = LocalDateTime.now();
-    private static final Color CLR_DARK  = new Color(27, 44, 56);
     private static final Color CLR_GREEN = new Color(52, 120, 77);
     private static final Color CLR_WHITE = Color.WHITE;
     private static final Color CLR_LINE  = new Color(200, 210, 205);

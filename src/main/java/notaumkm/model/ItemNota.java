@@ -1,18 +1,11 @@
 package notaumkm.model;
 
-/**
- * Model ItemNota
- * Merepresentasikan satu baris item dalam keranjang belanja sebelum disimpan ke DB.
- * Digunakan sebagai baris pada tabel transaksi di layar Kasir.
- */
 public class ItemNota {
 
     private String namaBarang;
     private double hargaSatuan;
     private int    qty;
     private double subtotal;
-
-    // ── Konstruktor ─────────────────────────────────────────────────────────
 
     public ItemNota() {}
 
@@ -23,17 +16,9 @@ public class ItemNota {
         hitungSubtotal();
     }
 
-    // ── Logika bisnis ────────────────────────────────────────────────────────
-
-    /**
-     * Menghitung ulang subtotal berdasarkan harga satuan dan qty.
-     * Dipanggil setiap kali qty berubah.
-     */
     public void hitungSubtotal() {
         this.subtotal = this.hargaSatuan * this.qty;
     }
-
-    // ── Getter & Setter ──────────────────────────────────────────────────────
 
     public String getNamaBarang()           { return namaBarang; }
     public void   setNamaBarang(String n)   { this.namaBarang = n; }
