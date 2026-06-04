@@ -10,24 +10,16 @@ import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.concurrent.ExecutionException;
 
-/**
- * LoginFrame
- * Halaman login awal aplikasi.
- * Memvalidasi kredensial dan mengarahkan ke halaman sesuai role.
- */
 public class LoginFrame extends JFrame {
 
-    // ── Komponen UI ──────────────────────────────────────────────────────────
     private JTextField     txtUsername;
     private JPasswordField txtPassword;
     private JButton        btnLogin;
     private JLabel         lblStatus;
 
-    // ── DAO ──────────────────────────────────────────────────────────────────
     private final AdminDAO adminDAO = new AdminDAO();
 
-    // ── Warna tema ───────────────────────────────────────────────────────────
-    private static final Color CLR_DARK     = new Color(27,  44,  56);   // Header gelap
+    private static final Color CLR_DARK     = new Color(27,  44,  56);  
     private static final Color CLR_GREEN    = new Color(52, 120,  77);   // Aksen hijau
     private static final Color CLR_BG       = new Color(245, 247, 250);  // Background
     private static final Color CLR_WHITE    = Color.WHITE;
@@ -111,28 +103,28 @@ public class LoginFrame extends JFrame {
         formPanel.add(lblStatus);
 
         // ── Info akun demo ────────────────────────────────────────────────────
-        JPanel infoPanel = new JPanel(new GridLayout(3, 1, 0, 4));
-        infoPanel.setBackground(new Color(235, 245, 238));
-        infoPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(150, 200, 160), 1),
-            new EmptyBorder(10, 15, 10, 15)
-        ));
+        // JPanel infoPanel = new JPanel(new GridLayout(3, 1, 0, 4));
+        // infoPanel.setBackground(new Color(235, 245, 238));
+        // infoPanel.setBorder(BorderFactory.createCompoundBorder(
+        //     BorderFactory.createLineBorder(new Color(150, 200, 160), 1),
+        //     new EmptyBorder(10, 15, 10, 15)
+        // ));
 
-        JLabel lblInfo = new JLabel("Akun Demo:", SwingConstants.LEFT);
-        lblInfo.setFont(new Font("Segoe UI", Font.BOLD, 11));
-        lblInfo.setForeground(CLR_DARK);
-        infoPanel.add(lblInfo);
+        // JLabel lblInfo = new JLabel("Akun Demo:", SwingConstants.LEFT);
+        // lblInfo.setFont(new Font("Segoe UI", Font.BOLD, 11));
+        // lblInfo.setForeground(CLR_DARK);
+        // infoPanel.add(lblInfo);
 
-        JLabel lblKasir = new JLabel("  Kasir    : kasir1 / kasir123");
-        lblKasir.setFont(new Font("Monospaced", Font.PLAIN, 11));
-        infoPanel.add(lblKasir);
+        // JLabel lblKasir = new JLabel("  Kasir    : kasir1 / kasir123");
+        // lblKasir.setFont(new Font("Monospaced", Font.PLAIN, 11));
+        // infoPanel.add(lblKasir);
 
-        JLabel lblKelola = new JLabel("  Pengelola: pengelola / kelola123");
-        lblKelola.setFont(new Font("Monospaced", Font.PLAIN, 11));
-        infoPanel.add(lblKelola);
+        // JLabel lblKelola = new JLabel("  Pengelola: pengelola / kelola123");
+        // lblKelola.setFont(new Font("Monospaced", Font.PLAIN, 11));
+        // infoPanel.add(lblKelola);
 
-        formPanel.add(Box.createVerticalStrut(16));
-        formPanel.add(infoPanel);
+        // formPanel.add(Box.createVerticalStrut(16));
+        // formPanel.add(infoPanel);
 
         // ── Footer ────────────────────────────────────────────────────────────
         JLabel lblFooter = new JLabel("© 2026 Sistem Nota UMKM", SwingConstants.CENTER);
