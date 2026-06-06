@@ -91,30 +91,6 @@ public class LoginFrame extends JFrame {
         lblStatus.setAlignmentX(Component.CENTER_ALIGNMENT);
         formPanel.add(lblStatus);
 
-        // ── Info akun demo ────────────────────────────────────────────────────
-        // JPanel infoPanel = new JPanel(new GridLayout(3, 1, 0, 4));
-        // infoPanel.setBackground(new Color(235, 245, 238));
-        // infoPanel.setBorder(BorderFactory.createCompoundBorder(
-        //     BorderFactory.createLineBorder(new Color(150, 200, 160), 1),
-        //     new EmptyBorder(10, 15, 10, 15)
-        // ));
-
-        // JLabel lblInfo = new JLabel("Akun Demo:", SwingConstants.LEFT);
-        // lblInfo.setFont(new Font("Segoe UI", Font.BOLD, 11));
-        // lblInfo.setForeground(CLR_DARK);
-        // infoPanel.add(lblInfo);
-
-        // JLabel lblKasir = new JLabel("  Kasir    : kasir1 / kasir123");
-        // lblKasir.setFont(new Font("Monospaced", Font.PLAIN, 11));
-        // infoPanel.add(lblKasir);
-
-        // JLabel lblKelola = new JLabel("  Pengelola: pengelola / kelola123");
-        // lblKelola.setFont(new Font("Monospaced", Font.PLAIN, 11));
-        // infoPanel.add(lblKelola);
-
-        // formPanel.add(Box.createVerticalStrut(16));
-        // formPanel.add(infoPanel);
-
         JLabel lblFooter = new JLabel("© 2026 Sistem Nota UMKM", SwingConstants.CENTER);
         lblFooter.setFont(new Font("Segoe UI", Font.PLAIN, 11));
         lblFooter.setForeground(new Color(150, 160, 165));
