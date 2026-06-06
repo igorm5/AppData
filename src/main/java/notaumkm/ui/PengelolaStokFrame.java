@@ -1,10 +1,8 @@
 package notaumkm.ui;
-
 import notaumkm.db.BarangDAO;
 import notaumkm.model.Admin;
 import notaumkm.model.Barang;
 import notaumkm.util.FormatUtil;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
