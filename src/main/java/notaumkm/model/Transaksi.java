@@ -1,7 +1,6 @@
 package notaumkm.model;
 
 public class Transaksi {
-
     private String noNota;
     private String tanggalJam;
     private String namaCustomer;
@@ -10,8 +9,7 @@ public class Transaksi {
 
     public Transaksi() {}
 
-    public Transaksi(String noNota, String tanggalJam, String namaCustomer,
-                     String kasir, double total) {
+    public Transaksi(String noNota, String tanggalJam, String namaCustomer, String kasir, double total) {
         this.noNota       = noNota;
         this.tanggalJam   = tanggalJam;
         this.namaCustomer = namaCustomer;
