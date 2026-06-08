@@ -6,27 +6,40 @@ import java.sql.SQLException;
 
 public class DBConnection {
 
-    private static final String SERVER   = "localhost";   
-    private static final String PORT     = "1433";        
-    private static final String DATABASE = "nota_umkm";  
-    private static final String USER     = "sa";          
-    private static final String PASS     = "12345"; 
-    private static final String URL =
-        "jdbc:sqlserver://" + SERVER + ":" + PORT
-        + ";databaseName=" + DATABASE
-        + ";encrypt=false"      
-        + ";trustServerCertificate=true";
+    // ssms
+    private static final String SERVER = "localhost";
+    private static final String PORT = "1433";
+    private static final String DATABASE = "nota_umkm";
+    private static final String USER = "sa";
+    private static final String PASS = "KopiHitam123#";
+    private static final String URL = "jdbc:sqlserver://" + SERVER + ":" + PORT
+            + ";databaseName=" + DATABASE
+            + ";encrypt=true"
+            + ";trustServerCertificate=true";
+
+    // igor
+    // private static final String SERVER = "localhost";
+    // private static final String PORT = "1433";
+    // private static final String DATABASE = "nota_umkm";
+    // private static final String USER = "sa";
+    // private static final String PASS = "12345";
+    // private static final String URL =
+    // "jdbc:sqlserver://" + SERVER + ":" + PORT
+    // + ";databaseName=" + DATABASE
+    // + ";encrypt=false"
+    // + ";trustServerCertificate=true";
 
     private static Connection instance = null;
 
-    private DBConnection() {}
+    private DBConnection() {
+    }
 
     public static Connection getConnection() throws SQLException {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         } catch (ClassNotFoundException e) {
             throw new SQLException(
-                "Driver SQL Server tidak ditemukan. Pastikan mssql-jdbc-*.jar ada di classpath.", e);
+                    "Driver SQL Server tidak ditemukan. Pastikan mssql-jdbc-*.jar ada di classpath.", e);
         }
 
         if (instance == null || instance.isClosed()) {
